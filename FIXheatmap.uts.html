@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Peta Persebaran Aktivitas Aufa 2024 Berdasarkan Foto</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 600px; }
+    #title { text-align: center; }
+    #subtitle { text-align: center; font-style: italic; }
+    .panel { position: absolute; top: 10px; left: 10px; padding: 10px; background-color: rgba(255, 255, 255, 0.8); z-index: 1000; border-radius: 5px; }
+    .alert-control { background-color: #fff; padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  
+  <h1 id="title">Peta persebaran aktivitas Aufa berdasarkan foto 1 tahun terakhir</h1>
+  <h3 id="subtitle">Aufa alfina nasywa // 22/503653/SV/21526</h3>
+  <div id="map"></div>
+  <div class="panel" id="city-info" style="display: none;"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script src="try_1_aufa_pho_location.js"></script>
+
+  <script>
+    var map = L.map('map', { zoomControl: false }).setView([-7.090687316331491, 108.50583416822646], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var heatmap1 = L.heatLayer(heatmapData, { radius: 100, blur: 24, maxZoom: 14});
+    heatmap1.addTo(map);
+
+    // Tambahkan kontrol zoom
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Tambahkan marker dan popup pada kota-kota yang Aufa singgahi
+    var cities = [
+      { name: 'Serang', location: [-6.1204, 106.1504], description: 'Serang: Kota ini merupakan ibu kota dari Provinsi Banten, terletak di sebelah barat laut Pulau Jawa. Serang terkenal dengan keindahan alamnya dan sebagai pusat sejarah dan budaya.' },
+      { name: 'Cilegon', location: [-6.0175, 106.0534], description: 'Cilegon: Kota industri yang berkembang pesat di Provinsi Banten, Cilegon dikenal sebagai pusat industri dan perdagangan di wilayah tersebut.' },
+      { name: 'Tangerang Selatan', location: [-6.2886, 106.7170], description: 'Juga dikenal sebagai Tangsel, kota ini merupakan bagian dari wilayah metropolitan Jakarta. Tangerang Selatan memiliki beragam pusat perbelanjaan dan kawasan hunian yang modern.' },
+      { name: 'Depok', location: [-6.4025, 106.7942], description: 'Salah satu kota satelit Jakarta, Depok terkenal dengan universitasnya dan taman-taman kota yang indah. Kota ini menjadi tujuan favorit bagi banyak mahasiswa.' },
+      { name: 'Jakarta', location: [-6.2088, 106.8456], description: 'Ibukota Indonesia, Jakarta adalah pusat politik, ekonomi, dan budaya negara. Kota ini memiliki kehidupan malam yang berkembang pesat dan berbagai atraksi wisata menarik.' },
+      { name: 'Bogor', location: [-6.5944, 106.7892], description: 'Terkenal dengan iklimnya yang sejuk, Bogor sering dijuluki sebagai "Kota Hujan" dan memiliki berbagai kebun raya yang indah, termasuk Kebun Raya Bogor yang terkenal.' },
+      { name: 'Yogyakarta', location: [-7.8012, 110.3648], description: 'Juga dikenal sebagai Jogja, Yogyakarta adalah pusat kebudayaan Jawa dengan warisan sejarah dan budaya yang kaya. Kota ini terkenal dengan kratonnya, makanan lezat, dan seni tradisional.' },
+      { name: 'Temanggung', location: [-7.3204, 110.1614], description: 'Kota kecil yang terletak di lereng Gunung Sindoro, Temanggung dikenal dengan kerajinan tembakau dan produk pertanian lainnya. Kota ini juga memiliki pemandangan alam yang menakjubkan.' },
+      { name: 'Bandung', location: [-6.9175, 107.6191], description: 'Kota kreatif yang dikelilingi oleh pegunungan, Bandung adalah pusat fashion, seni, dan kuliner di Jawa Barat. Kota ini terkenal dengan arsitektur art deco dan factory outlet-nya.' },
+      
+    ];
+
+    cities.forEach(function(city) {
+      var marker = L.marker(city.location).addTo(map);
+      marker.bindPopup("<b>" + city.name + "</b><br>" + city.description);
+      marker.on('click', function(e) {
+        document.getElementById('city-info').style.display = 'block';
+      });
+    });
+
+    // Buat kontrol untuk menampilkan peringatan
+    var alertControl = L.control({ position: 'topleft' });
+
+    alertControl.onAdd = function(map) {
+      var div = L.DomUtil.create('div', 'alert-control');
+      div.innerHTML = '<button onclick="showAlert()">Klik disini untuk pesan penting</button>';
+      return div;
+    };
+
+    alertControl.addTo(map);
+
+    // Fungsi untuk menampilkan peringatan
+    function showAlert() {
+      alert("Harap tekan pin pada peta untuk mengetahui nama kota yang aufa singgahi selama 1 tahun terakhir.");
+    }
+  </script>
+</body>
+</html>
